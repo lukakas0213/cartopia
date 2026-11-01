@@ -1,7 +1,7 @@
-package com.roadcanvas.app.data
+package com.cartopia.app.data
 
 import android.content.Context
-import com.roadcanvas.app.geo.GeoPoint
+import com.cartopia.app.geo.GeoPoint
 import org.json.JSONArray
 
 /**
@@ -10,7 +10,7 @@ import org.json.JSONArray
  */
 class VillageStore(context: Context) {
 
-    private val prefs = context.applicationContext.getSharedPreferences("roadcanvas", Context.MODE_PRIVATE)
+    private val prefs = context.applicationContext.getSharedPreferences("cartopia", Context.MODE_PRIVATE)
 
     val isSeeded: Boolean get() = prefs.getBoolean(KEY_SEEDED, false)
 

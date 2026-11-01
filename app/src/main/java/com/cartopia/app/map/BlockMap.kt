@@ -1,7 +1,7 @@
-package com.roadcanvas.app.map
+package com.cartopia.app.map
 
-import com.roadcanvas.app.geo.GeoPoint
-import com.roadcanvas.app.geo.Viewport
+import com.cartopia.app.geo.GeoPoint
+import com.cartopia.app.geo.Viewport
 import org.json.JSONArray
 import org.json.JSONObject
 

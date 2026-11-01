@@ -1,8 +1,8 @@
-package com.roadcanvas.app.drive
+package com.cartopia.app.drive
 
-import com.roadcanvas.app.geo.GeoPoint
-import com.roadcanvas.app.geo.bearingDegrees
-import com.roadcanvas.app.geo.distanceMeters
+import com.cartopia.app.geo.GeoPoint
+import com.cartopia.app.geo.bearingDegrees
+import com.cartopia.app.geo.distanceMeters
 import kotlin.math.abs
 
 /**

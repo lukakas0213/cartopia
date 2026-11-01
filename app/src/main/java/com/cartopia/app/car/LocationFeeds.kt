@@ -1,13 +1,13 @@
-package com.roadcanvas.app.car
+package com.cartopia.app.car
 
 import ai.pleos.playground.location.fused.FusedLocation
 import ai.pleos.playground.location.fused.listener.FusedLocationListener
 import ai.pleos.playground.location.fused.model.LocationData
 import android.content.Context
 import android.util.Log
-import com.roadcanvas.app.geo.GeoPoint
-import com.roadcanvas.app.geo.bearingDegrees
-import com.roadcanvas.app.geo.distanceMeters
+import com.cartopia.app.geo.GeoPoint
+import com.cartopia.app.geo.bearingDegrees
+import com.cartopia.app.geo.distanceMeters
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

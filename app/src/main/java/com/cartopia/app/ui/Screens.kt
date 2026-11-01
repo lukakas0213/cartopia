@@ -1,4 +1,4 @@
-package com.roadcanvas.app.ui
+package com.cartopia.app.ui
 
 import android.annotation.SuppressLint
 import android.webkit.JavascriptInterface
@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.webkit.WebViewAssetLoader
-import com.roadcanvas.app.AppViewModel
-import com.roadcanvas.app.UiState
-import com.roadcanvas.app.map.BlockMap
+import com.cartopia.app.AppViewModel
+import com.cartopia.app.UiState
+import com.cartopia.app.map.BlockMap
 
 private val SheetShape = RoundedCornerShape(topStart = 32.dp, bottomStart = 32.dp)
 
@@ -158,7 +158,7 @@ fun VillageScreen(vm: AppViewModel, onMap: () -> Unit) {
                         override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                             loader.shouldInterceptRequest(request.url)
                     }
-                    addJavascriptInterface(VillageBridge(vm), "RoadCanvas")
+                    addJavascriptInterface(VillageBridge(vm), "Cartopia")
                     loadUrl("https://appassets.androidplatform.net/assets/village/index.html")
                 }
             },

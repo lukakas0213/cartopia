@@ -1,6 +1,6 @@
-package com.roadcanvas.app.map
+package com.cartopia.app.map
 
-import com.roadcanvas.app.geo.MapPoint
+import com.cartopia.app.geo.MapPoint
 import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min

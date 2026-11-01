@@ -1,4 +1,4 @@
-# 로드캔버스 (RoadCanvas)
+# 카토피아 (Cartopia)
 
 안전하게 달린 만큼 새까만 지도가 블록 단위로 열리고, 그 땅에 목장과 숲, 내 집을 가꾸는 Pleos Connect 차량용 앱입니다.
 
@@ -23,7 +23,7 @@
 1. Pleos Connect 에뮬레이터를 실행합니다 ([설치 가이드](https://document.pleos.ai/docs/connect/guide/getting-started/application-development/setup-connect-sdk-emulator)).
 2. APK를 설치합니다.
    ```
-   adb install -r apk/RoadCanvas_release.apk
+   adb install -r apk/Cartopia_release.apk
    ```
 3. 앱을 실행하고, 오른쪽 시트의 **시연 주행 시작**을 누릅니다. 왕십리역 → 응봉역 → 성수동1가 경로를 4배속으로 재생하면서 블록이 열리고 점수가 매겨집니다.
 4. 주행이 끝나면 결과 화면에서 **내 마을로 가기**를 눌러 3D 마을을 봅니다.

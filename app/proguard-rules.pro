@@ -5,7 +5,7 @@
 -dontwarn ai.pleos.**
 -dontwarn com.google.gson.**
 
-# Methods the 3D village page calls through window.RoadCanvas.
--keepclassmembers class com.roadcanvas.app.ui.VillageBridge {
+# Methods the 3D village page calls through window.Cartopia.
+-keepclassmembers class com.cartopia.app.ui.VillageBridge {
     @android.webkit.JavascriptInterface <methods>;
 }

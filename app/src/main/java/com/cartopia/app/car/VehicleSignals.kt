@@ -1,4 +1,4 @@
-package com.roadcanvas.app.car
+package com.cartopia.app.car
 
 import ai.pleos.playground.vehicle.Vehicle
 import ai.pleos.playground.vehicle.api.model.area.SeatArea

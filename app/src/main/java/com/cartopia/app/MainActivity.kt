@@ -1,4 +1,4 @@
-package com.roadcanvas.app
+package com.cartopia.app
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -16,11 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.roadcanvas.app.ui.DriveScreen
-import com.roadcanvas.app.ui.RcColors
-import com.roadcanvas.app.ui.RcType
-import com.roadcanvas.app.ui.ResultScreen
-import com.roadcanvas.app.ui.VillageScreen
+import com.cartopia.app.ui.DriveScreen
+import com.cartopia.app.ui.RcColors
+import com.cartopia.app.ui.RcType
+import com.cartopia.app.ui.ResultScreen
+import com.cartopia.app.ui.VillageScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

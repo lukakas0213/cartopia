@@ -1,4 +1,4 @@
-package com.roadcanvas.app.car
+package com.cartopia.app.car
 
 import ai.pleos.playground.tts.constant.ErrorType
 import ai.pleos.playground.tts.constant.Mode

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.roadcanvas.app"
+    namespace = "com.cartopia.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.roadcanvas.app"
+        applicationId = "com.cartopia.app"
         minSdk = 28
         targetSdk = 35
         versionCode = 1

@@ -1,11 +1,11 @@
-package com.roadcanvas.app
+package com.cartopia.app
 
-import com.roadcanvas.app.drive.Miles
-import com.roadcanvas.app.drive.SafetyScorer
-import com.roadcanvas.app.geo.GeoPoint
-import com.roadcanvas.app.map.BlockMap
-import com.roadcanvas.app.map.BlockRevealer
-import com.roadcanvas.app.map.RouteBook
+import com.cartopia.app.drive.Miles
+import com.cartopia.app.drive.SafetyScorer
+import com.cartopia.app.geo.GeoPoint
+import com.cartopia.app.map.BlockMap
+import com.cartopia.app.map.BlockRevealer
+import com.cartopia.app.map.RouteBook
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

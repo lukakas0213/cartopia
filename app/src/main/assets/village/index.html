@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>로드캔버스 3D 마을</title>
+<title>카토피아 3D 마을</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
 <style>
@@ -561,7 +561,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   });
 
   // ---------- info card + actions ----------
-  const bridge = window.RoadCanvas;
+  const bridge = window.Cartopia;
   let coins = bridge ? Number(bridge.getMiles()) : 1280;
   const fish = ['피라미', '붕어', '잉어', '쏘가리', '메기', '끄리'];
   const state = Object.assign({ wool: 3, fed: false, dex: 5, lights: true }, bridge ? JSON.parse(bridge.getState() || '{}') : {});

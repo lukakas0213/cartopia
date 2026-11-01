@@ -1,4 +1,4 @@
-package com.roadcanvas.app.ui
+package com.cartopia.app.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import com.roadcanvas.app.geo.MapPoint
-import com.roadcanvas.app.map.BlockMap
+import com.cartopia.app.geo.MapPoint
+import com.cartopia.app.map.BlockMap
 import kotlin.math.max
 
 /**
