@@ -3,46 +3,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>카토피아 3D 마을</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
 <style>
-/* Layout: full-bleed 3D diorama with floating dark pills (matches the in-car UI) */
+/* Layout: full-bleed sunny 3D diorama with floating cream bubbles */
 :root {
-  color-scheme: dark;
-  --ground: #111111;
-  --sheet: #1C1C1C;
-  --sheet-2: #262626;
-  --line: #2E2E2E;
-  --ink: #FFFFFF;
-  --ink-2: #A0A0A0;
+  color-scheme: light;
+  --ground: #BEE5F2;
+  --sheet: #FFF9EC;
+  --sheet-2: #F6EBD3;
+  --line: #EADBBD;
+  --ink: #5B4636;
+  --ink-2: #9A8571;
+  --accent: #4CC07A;
+  --accent-ink: #FFFFFF;
+  --mile: #FFC93C;
   --sans: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --round: 'Jua', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
 }
 html, body { height: 100%; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans); overflow: hidden; }
 #stage { position: fixed; inset: 0; }
 #stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
-.pill { background: var(--sheet); border-radius: 999px; padding: 10px 18px; display: flex; align-items: center; gap: 12px; }
+.pill { background: var(--sheet); border-radius: 999px; padding: 10px 20px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 0 var(--line), 0 10px 24px rgb(91 70 54 / 0.12); }
 .top { position: fixed; top: calc(16px + env(safe-area-inset-top, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; pointer-events: none; }
 .top .pill { pointer-events: auto; }
-.title { font-weight: 700; font-size: 18px; }
+.title { font-family: var(--round); font-weight: 400; font-size: 21px; }
 .sub { font-size: 14px; color: var(--ink-2); }
-.coins { font-weight: 800; font-size: 19px; font-variant-numeric: tabular-nums; }
+.coins { font-family: var(--round); font-size: 22px; font-variant-numeric: tabular-nums; }
+.coins::before { content: ""; width: 22px; height: 22px; border-radius: 50%; background: var(--mile); box-shadow: inset 0 -3px 0 #E8A417; }
 .coins small { font-weight: 400; font-size: 14px; color: var(--ink-2); margin-left: 4px; }
 .bottom { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; pointer-events: none; }
 .chips { display: flex; gap: 8px; overflow-x: auto; max-width: 100%; pointer-events: auto; padding-bottom: 2px; }
-.chip { flex: none; border: 0; background: var(--sheet); color: var(--ink); font: 500 15px var(--sans); padding: 11px 18px; border-radius: 999px; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--ink); color: var(--ground); font-weight: 700; }
+.chip { flex: none; border: 0; background: var(--sheet); color: var(--ink); font: 400 17px var(--round); padding: 11px 20px; border-radius: 999px; cursor: pointer; box-shadow: 0 4px 0 var(--line); }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); box-shadow: 0 4px 0 #36A062; }
 .chip:focus-visible, .act:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-.card { pointer-events: auto; width: min(360px, 100%); box-sizing: border-box; background: var(--sheet); border-radius: 28px; padding: 22px 24px; display: grid; gap: 10px; }
-.card h2 { margin: 0; font-size: 22px; font-weight: 800; text-wrap: balance; }
+.card { pointer-events: auto; width: min(360px, 100%); box-sizing: border-box; background: var(--sheet); border-radius: 32px; padding: 22px 24px; display: grid; gap: 10px; box-shadow: 0 6px 0 var(--line), 0 16px 32px rgb(91 70 54 / 0.14); }
+.card h2 { margin: 0; font-family: var(--round); font-size: 26px; font-weight: 400; text-wrap: balance; }
 .card .meta { font-size: 14px; color: var(--ink-2); }
-.card p { margin: 0; font-size: 15px; line-height: 1.6; color: #D6D6D6; }
-.act { margin-top: 6px; height: 56px; border-radius: 28px; border: 2px solid var(--ink); background: var(--ink); color: var(--ground); font: 700 16px var(--sans); cursor: pointer; }
-.act[disabled] { background: transparent; color: var(--ink-2); border-color: var(--line); cursor: default; }
+.card p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--ink); }
+.act { margin-top: 6px; height: 56px; border-radius: 28px; border: 0; background: var(--accent); color: var(--accent-ink); font: 400 19px var(--round); cursor: pointer; box-shadow: 0 5px 0 #36A062; }
+.act:active { transform: translateY(3px); box-shadow: 0 2px 0 #36A062; }
+.act[disabled] { background: var(--sheet-2); color: var(--ink-2); box-shadow: none; cursor: default; }
 .note { font-size: 13px; color: var(--ink-2); min-height: 1em; }
-.tag { position: fixed; left: 0; top: 0; transform: translate(-50%, -100%); background: var(--sheet); color: var(--ink); font: 700 13px var(--sans); padding: 6px 12px; border-radius: 999px; white-space: nowrap; pointer-events: none; }
+.tag { position: fixed; left: 0; top: 0; transform: translate(-50%, -100%); background: var(--sheet); color: var(--ink); font: 400 15px var(--round); padding: 6px 14px; border-radius: 999px; white-space: nowrap; pointer-events: none; box-shadow: 0 3px 0 var(--line); }
 .tag::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: var(--sheet); transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
-.tag b { font-weight: 400; color: var(--ink-2); margin-left: 6px; }
-.credit { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(70px + env(safe-area-inset-top, 0px)); font-size: 11px; color: #6E6E6E; }
+.tag b { font-weight: 400; color: var(--accent); margin-left: 6px; }
+.credit { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(70px + env(safe-area-inset-top, 0px)); font-size: 11px; color: #6E8C98; }
 #fail { position: fixed; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--ink-2); }
 @media (max-width: 560px) {
   .card { width: 100%; }
@@ -99,8 +106,15 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   stage.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#111111');
-  scene.fog = new THREE.Fog('#111111', 95, 170);
+  // soft daytime sky: a vertical gradient behind everything
+  const sky = document.createElement('canvas');
+  sky.width = 2; sky.height = 256;
+  const sg = sky.getContext('2d'), grad = sg.createLinearGradient(0, 0, 0, 256);
+  grad.addColorStop(0, '#8FD3F4'); grad.addColorStop(0.6, '#CBEFFA'); grad.addColorStop(1, '#FFF4DA');
+  sg.fillStyle = grad; sg.fillRect(0, 0, 2, 256);
+  scene.background = new THREE.CanvasTexture(sky);
+  scene.background.encoding = THREE.sRGBEncoding;
+  scene.fog = new THREE.Fog('#BEE5F2', 90, 190);
 
   const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 400);
   camera.position.set(4, 72, 70);
@@ -115,8 +129,8 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   controls.target.set(0, 0, 0);
 
   // lights
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x3a3a46, 0.65));
-  const sun = new THREE.DirectionalLight(0xfff1dc, 0.85);
+  scene.add(new THREE.HemisphereLight(0xe6f6ff, 0xffe6cc, 0.5));
+  const sun = new THREE.DirectionalLight(0xfff0d6, 0.5);
   sun.position.set(-30, 60, 25);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
@@ -125,14 +139,19 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   sun.shadow.radius = 4;
   scene.add(sun);
 
-  // ground: the clean dark block map
+  // ground: the block map in pastel (tools/cute_ground.py)
   const tex = new THREE.TextureLoader().load('ground.jpg');
   tex.encoding = THREE.sRGBEncoding;
   tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
   const ground = new THREE.Mesh(new THREE.PlaneGeometry(128, 72), new THREE.MeshBasicMaterial({ map: tex }));
   ground.rotation.x = -Math.PI / 2;
   scene.add(ground);
-  const shadowCatcher = new THREE.Mesh(new THREE.PlaneGeometry(128, 72), new THREE.ShadowMaterial({ opacity: 0.45 }));
+  // the same pastel sea continues past the edge of the map
+  const sea = new THREE.Mesh(new THREE.PlaneGeometry(900, 900), new THREE.MeshBasicMaterial({ color: '#BEE5F2' }));
+  sea.rotation.x = -Math.PI / 2;
+  sea.position.y = -0.05;
+  scene.add(sea);
+  const shadowCatcher = new THREE.Mesh(new THREE.PlaneGeometry(128, 72), new THREE.ShadowMaterial({ opacity: 0.18, color: new THREE.Color('#6A4FA0') }));
   shadowCatcher.rotation.x = -Math.PI / 2;
   shadowCatcher.position.y = 0.02;
   shadowCatcher.receiveShadow = true;
@@ -142,7 +161,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   const ramp = document.createElement('canvas');
   ramp.width = 4; ramp.height = 1;
   const rc = ramp.getContext('2d');
-  ['#6a6a6a', '#a8a8a8', '#e4e4e4', '#ffffff'].forEach((c, i) => { rc.fillStyle = c; rc.fillRect(i, 0, 1, 1); });
+  ['#b4a8cc', '#d9d1e8', '#f4f0f8', '#ffffff'].forEach((c, i) => { rc.fillStyle = c; rc.fillRect(i, 0, 1, 1); });
   const gradientMap = new THREE.CanvasTexture(ramp);
   gradientMap.minFilter = gradientMap.magFilter = THREE.NearestFilter;
   const mats = {};
@@ -164,6 +183,18 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   const box = (x, y, z) => new THREE.BoxGeometry(x, y, z);
 
   // ---------- builders ----------
+  // big glossy eyes + blush, the Animal Crossing style face; x points forward
+  function face(head, x, y, z, s = 1, blush = true) {
+    [-1, 1].forEach((sd) => {
+      head.add(mesh(sph(0.075 * s, 12), '#2B2230', { p: [x, y, sd * z], s: [0.6, 1.25, 1] }));
+      const hi = mesh(sph(0.026 * s, 8), '#FFFFFF', { p: [x + 0.035 * s, y + 0.04 * s, sd * z + 0.012 * s] });
+      hi.castShadow = false; head.add(hi);
+      if (blush) {
+        const b = mesh(sph(0.06 * s, 10), '#FF9DB3', { p: [x - 0.02 * s, y - 0.1 * s, sd * (z + 0.07 * s)], s: [0.35, 0.6, 1] });
+        b.castShadow = false; head.add(b);
+      }
+    });
+  }
   function pad(r, color = '#86C26A', h = 0.5) {
     const g = new THREE.Group();
     g.add(mesh(cyl(r, r + 0.25, h, 48), color, { p: [0, h / 2, 0] }));
@@ -173,14 +204,14 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
 
   function roundTree(kind) {
     const g = new THREE.Group();
-    const crownColor = kind === 'cherry' ? '#F4A9C6' : kind === 'apple' ? '#5FB565' : '#6CC070';
-    g.add(mesh(cyl(0.22, 0.3, 1.4, 10), '#8A5A35', { p: [0, 0.7, 0] }));
+    const crownColor = kind === 'cherry' ? '#FF9EC4' : kind === 'apple' ? '#4FCB6A' : '#5ED47A';
+    g.add(mesh(cyl(0.22, 0.3, 1.4, 10), '#B07040', { p: [0, 0.7, 0] }));
     const crown = new THREE.Group();
     crown.position.y = 1.9;
     [[0, 0.3, 0, 1.0], [0.55, 0, 0.2, 0.75], [-0.5, 0.05, -0.15, 0.78], [0.05, -0.1, 0.55, 0.7], [-0.1, 0.75, -0.1, 0.6]]
       .forEach(([x, y, z, r]) => crown.add(mesh(sph(r, 16), crownColor, { p: [x, y, z] })));
     if (kind === 'apple') [[0.6, 0.2, 0.55], [-0.45, 0.45, 0.6], [0.2, 0.9, 0.5], [-0.7, -0.05, 0.3]]
-      .forEach((p) => crown.add(mesh(sph(0.15, 10), '#E8473A', { p })));
+      .forEach((p) => crown.add(mesh(sph(0.17, 10), '#FF5A4E', { p })));
     g.add(crown);
     g.userData.sway = crown;
     return g;
@@ -188,9 +219,9 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
 
   function pine() {
     const g = new THREE.Group();
-    g.add(mesh(cyl(0.18, 0.24, 0.9, 8), '#7A4E2E', { p: [0, 0.45, 0] }));
+    g.add(mesh(cyl(0.18, 0.24, 0.9, 8), '#A86A3C', { p: [0, 0.45, 0] }));
     const crown = new THREE.Group();
-    [[1.1, 1.3, 1.2], [0.85, 1.1, 1.9], [0.55, 0.9, 2.55]].forEach(([r, h, y]) => crown.add(mesh(new THREE.ConeGeometry(r, h, 9), '#3F9A62', { p: [0, y, 0] })));
+    [[1.1, 1.3, 1.2], [0.85, 1.1, 1.9], [0.55, 0.9, 2.55]].forEach(([r, h, y]) => crown.add(mesh(new THREE.ConeGeometry(r, h, 9), '#36C08A', { p: [0, y, 0] })));
     g.add(crown);
     g.userData.sway = crown;
     return g;
@@ -201,20 +232,20 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
     const body = new THREE.Group();
     body.position.y = 0.95;
     [[0, 0.15, 0, 0.55], [0.4, 0.05, 0.22, 0.45], [0.4, 0.05, -0.22, 0.45], [-0.4, 0.05, 0.22, 0.45], [-0.4, 0.05, -0.22, 0.45], [0, 0.42, 0, 0.42], [-0.62, 0.15, 0, 0.36]]
-      .forEach(([x, y, z, r]) => body.add(mesh(sph(r, 14), '#F7F4EE', { p: [x, y, z] })));
+      .forEach(([x, y, z, r]) => body.add(mesh(sph(r, 14), '#FFFFFF', { p: [x, y, z] })));
     const head = new THREE.Group();
     head.position.set(0.72, 0.28, 0);
-    head.add(mesh(sph(0.3, 16), '#3B3640', { s: [1.15, 1.05, 0.95] }));
-    head.add(mesh(sph(0.22, 12), '#F7F4EE', { p: [-0.12, 0.2, 0] }));
-    [-1, 1].forEach((sd) => {
-      head.add(mesh(sph(0.12, 10), '#3B3640', { p: [-0.02, 0.06, sd * 0.32], s: [1.4, 0.6, 0.9] }));
-      head.add(mesh(sph(0.055, 8), '#FFFFFF', { p: [0.25, 0.08, sd * 0.13] }));
-    });
+    head.add(mesh(sph(0.38, 18), '#FFE3CF', { s: [1.0, 1.0, 1.05] }));
+    [[-0.12, 0.3, 0, 0.24], [-0.02, 0.32, 0.17, 0.17], [-0.02, 0.32, -0.17, 0.17]]
+      .forEach(([x, y, z, r]) => head.add(mesh(sph(r, 12), '#FFFFFF', { p: [x, y, z] })));
+    [-1, 1].forEach((sd) => head.add(mesh(sph(0.13, 10), '#FFC9B0', { p: [-0.05, 0.08, sd * 0.4], s: [1.4, 0.55, 0.9], r: [sd * 0.4, 0, 0] })));
+    face(head, 0.33, 0.05, 0.13, 1.1);
+    head.add(mesh(sph(0.04, 8), '#E98A8A', { p: [0.37, -0.1, 0] }));
     body.add(head);
     g.add(body);
     const legs = [];
     [[0.32, 0.2], [0.32, -0.2], [-0.32, 0.2], [-0.32, -0.2]].forEach(([x, z]) => {
-      const l = mesh(cyl(0.08, 0.07, 0.6, 8), '#3B3640', { p: [x, 0.3, z] });
+      const l = mesh(cyl(0.09, 0.08, 0.6, 8), '#FFE3CF', { p: [x, 0.3, z] });
       legs.push(l); g.add(l);
     });
     g.userData = { body, head, legs };
@@ -222,7 +253,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   }
 
   function deer(fawn) {
-    const c = fawn ? '#D9A06B' : '#C68650';
+    const c = fawn ? '#F2B57A' : '#E39A5C';
     const g = new THREE.Group();
     const body = new THREE.Group();
     body.position.y = 1.15;
@@ -238,7 +269,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
     head.add(mesh(sph(0.1, 8), '#3B2A20', { p: [0.36, -0.04, 0] }));
     [-1, 1].forEach((sd) => {
       head.add(mesh(sph(0.12, 10), c, { p: [-0.1, 0.2, sd * 0.24], s: [0.6, 1.2, 0.5], r: [sd * 0.5, 0, 0] }));
-      head.add(mesh(sph(0.045, 8), '#2A2420', { p: [0.2, 0.08, sd * 0.15] }));
+
       if (!fawn) {
         const a = new THREE.Group();
         a.position.set(-0.02, 0.24, sd * 0.1);
@@ -250,11 +281,12 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
       }
     });
     body.add(head);
+    face(head, 0.27, 0.08, 0.15, 1);
     body.add(mesh(sph(0.12, 8), '#FFF8EC', { p: [-0.75, 0.15, 0] }));
     g.add(body);
     const legs = [];
     [[0.45, 0.2], [0.45, -0.2], [-0.45, 0.2], [-0.45, -0.2]].forEach(([x, z]) => {
-      const l = mesh(cyl(0.065, 0.05, 0.85, 8), '#8A5A35', { p: [x, 0.43, z] });
+      const l = mesh(cyl(0.07, 0.055, 0.85, 8), '#B87445', { p: [x, 0.43, z] });
       legs.push(l); g.add(l);
     });
     if (fawn) g.scale.setScalar(0.65);
@@ -292,28 +324,28 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
 
   function barn() {
     const g = new THREE.Group();
-    g.add(mesh(box(3.2, 2.2, 2.6), '#D9573F', { p: [0, 1.1 + 0.5, 0] }));
-    const roof = gableRoof(3.7, 2.9, 1.4, '#7E3428');
+    g.add(mesh(box(3.2, 2.2, 2.6), '#FF6F5B', { p: [0, 1.1 + 0.5, 0] }));
+    const roof = gableRoof(3.7, 2.9, 1.4, '#FFF4E2');
     roof.position.y = 2.7 + 0.5;
     g.add(roof);
     g.add(mesh(box(1.2, 1.4, 0.08), '#FFF6E8', { p: [0, 1.2, 1.32] }));
-    g.add(mesh(box(1.0, 1.2, 0.06), '#B8482F', { p: [0, 1.2, 1.35] }));
+    g.add(mesh(box(1.0, 1.2, 0.06), '#E5533F', { p: [0, 1.2, 1.35] }));
     g.add(mesh(box(0.08, 1.5, 0.05), '#FFF6E8', { p: [0, 1.2, 1.39], r: [0, 0, 0.7] }));
     g.add(mesh(box(0.08, 1.5, 0.05), '#FFF6E8', { p: [0, 1.2, 1.39], r: [0, 0, -0.7] }));
     g.add(mesh(cyl(0.45, 0.45, 2.6, 16), '#E9E2D6', { p: [2.1, 1.8, -0.5] }));
-    g.add(mesh(sph(0.47, 16), '#9A3F2F', { p: [2.1, 3.1, -0.5], s: [1, 0.6, 1] }));
+    g.add(mesh(sph(0.47, 16), '#7CC8F0', { p: [2.1, 3.1, -0.5], s: [1, 0.6, 1] }));
     return g;
   }
 
   function house() {
     const g = new THREE.Group();
     const base = 0.5;
-    g.add(mesh(box(3.4, 2.4, 2.8), '#FFF1D8', { p: [0, base + 1.2, 0] }));
-    const roof = gableRoof(4.0, 3.2, 1.6, '#E46F55');
+    g.add(mesh(box(3.4, 2.4, 2.8), '#FFF6E6', { p: [0, base + 1.2, 0] }));
+    const roof = gableRoof(4.0, 3.2, 1.6, '#5BB8F5');
     roof.position.y = base + 2.4;
     g.add(roof);
-    g.add(mesh(box(0.5, 1.1, 0.5), '#B45A44', { p: [0.95, base + 3.6, -0.5] }));
-    g.add(mesh(box(0.8, 1.4, 0.1), '#8A5A35', { p: [0, base + 0.7, 1.42] }));
+    g.add(mesh(box(0.5, 1.1, 0.5), '#F28B6B', { p: [0.95, base + 3.6, -0.5] }));
+    g.add(mesh(box(0.8, 1.4, 0.1), '#FF9E6B', { p: [0, base + 0.7, 1.42] }));
     g.add(mesh(sph(0.06, 8), '#FFD25E', { p: [0.25, base + 0.75, 1.5] }));
     const glow = new THREE.MeshBasicMaterial({ color: '#FFD98A' });
     const windows = [];
@@ -325,7 +357,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
       [-0.3, 0, 0.3].forEach((dx, i) => g.add(mesh(sph(0.12, 8), i % 2 ? '#FFD25E' : '#F28FB0', { p: [x + dx, base + 1.18, 1.5] })));
     });
     g.add(mesh(box(1.2, 0.18, 0.6), '#C9B79C', { p: [0, base + 0.09, 1.75] }));
-    const lamp = new THREE.PointLight(0xffc870, 0.9, 7);
+    const lamp = new THREE.PointLight(0xffc870, 0.4, 5);
     lamp.position.set(0, base + 1.5, 2.2);
     g.add(lamp);
     g.userData = { windows, glow, lamp };
@@ -352,14 +384,14 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
     bobber.add(mesh(sph(0.14, 10), '#E8473A'));
     bobber.add(mesh(sph(0.1, 10), '#FFFFFF', { p: [0, 0.1, 0] }));
     g.add(bobber);
-    const ripple = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.035, 6, 32), new THREE.MeshBasicMaterial({ color: '#BFD8E8', transparent: true, opacity: 0.6 }));
+    const ripple = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.035, 6, 32), new THREE.MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0.6 }));
     ripple.rotation.x = Math.PI / 2;
     ripple.position.set(4.3, 0.08, 0.4);
     g.add(ripple);
     const boat = new THREE.Group();
     boat.position.set(-0.6, 0.25, 2.3);
     const hull = new THREE.SphereGeometry(0.8, 18, 10, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
-    boat.add(mesh(hull, '#5F8FC9', { s: [1.7, 0.6, 0.85] }));
+    boat.add(mesh(hull, '#FFD54A', { s: [1.7, 0.6, 0.85] }));
     boat.add(mesh(box(1.8, 0.08, 0.9), '#B9824F', { p: [0, 0.02, 0] }));
     g.add(boat);
     g.userData = { bobber, ripple, boat };
@@ -427,7 +459,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
     g.add(mesh(geo, color));
     const soil = new THREE.ExtrudeGeometry(s, { depth: 0.22, bevelEnabled: false });
     soil.rotateX(-Math.PI / 2);
-    g.add(mesh(soil, '#6B4E36', { s: [1, 1, 1] }));
+    g.add(mesh(soil, '#E2A86E', { s: [1, 1, 1] }));
     return g;
   }
   function fenceAlong(A, inset, spacing) {
@@ -470,7 +502,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   // 응봉산 양 목장: the part of the revealed block that is 응봉산 공원
   const FA = area(data.areas.farm);
   const farm = new THREE.Group();
-  farm.add(island(FA, '#8FC56E'));
+  farm.add(island(FA, '#8EE07A'));
   farm.add(fenceAlong(FA, 0.7, 1.5));
   const fp = pole(FA);
   const barnScale = clamp(fp.r / 3.2, 0.5, 1.15);
@@ -492,11 +524,11 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   // 서울숲 사슴 숲: the whole revealed 서울숲 block
   const SA = area(data.areas.forest);
   const forest = new THREE.Group();
-  forest.add(island(SA, '#7DBB63'));
+  forest.add(island(SA, '#7AD86E'));
   const sp = pole(SA);
   const pondR = clamp(sp.r * 0.45, 1.2, 3.2);
   const pondAt = { x: sp.x - sp.r * 0.35, z: sp.z + sp.r * 0.2 };
-  forest.add(mesh(cyl(pondR, pondR + 0.2, 0.1, 40), '#7FB6D9', { p: [pondAt.x, ISLAND_H + 0.06, pondAt.z], s: [1.3, 1, 0.85] }));
+  forest.add(mesh(cyl(pondR, pondR + 0.2, 0.1, 40), '#6FD0F5', { p: [pondAt.x, ISLAND_H + 0.06, pondAt.z], s: [1.3, 1, 0.85] }));
   const forestTaken = [{ x: pondAt.x, z: pondAt.z, r: pondR * 1.4 }, { x: sp.x + sp.r * 0.3, z: sp.z, r: 2.4 }];
   const treeCount = clamp(Math.round(SA.size / 9), 10, 40);
   for (let i = 0; i < treeCount; i++) {
@@ -525,7 +557,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   // 내 집: the small 성수동1가 block, house scaled to the room it has
   const HA = area(data.areas.home);
   const homeG = new THREE.Group();
-  homeG.add(island(HA, '#8FC56E'));
+  homeG.add(island(HA, '#9BE584'));
   const hp = pole(HA);
   const houseScale = clamp((hp.r * 2 * 0.8) / 4.0, 0.3, 1);
   const h = house(); h.scale.setScalar(houseScale); h.position.set(hp.x, ISLAND_H - 0.5 * houseScale, hp.z); h.rotation.y = longestEdgeAngle(HA); homeG.add(h);
@@ -536,14 +568,39 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   if (mbAt) { const m = mailbox(); m.scale.setScalar(houseScale); m.position.set(mbAt.x, ISLAND_H, mbAt.z); homeG.add(m); }
   for (let i = 0; i < 6; i++) {
     const p = randomInside(HA, 0.2, homeTaken, 0.1); if (!p) break;
-    homeG.add(mesh(sph(0.16 * houseScale + 0.06, 8), ['#F28FB0', '#FFD25E', '#B79AF0'][i % 3], { p: [p.x, ISLAND_H + 0.12, p.z] }));
+    homeG.add(mesh(sph(0.16 * houseScale + 0.06, 8), ['#FF8FB8', '#FFD84A', '#B99BFF'][i % 3], { p: [p.x, ISLAND_H + 0.12, p.z] }));
   }
   const smoke = [];
   for (let i = 0; i < 4; i++) {
-    const m = new THREE.Mesh(sph(0.3, 10), new THREE.MeshToonMaterial({ color: '#D8D8D8', gradientMap, transparent: true, opacity: 0.8 }));
+    const m = new THREE.Mesh(sph(0.3, 10), new THREE.MeshToonMaterial({ color: '#FFFFFF', gradientMap, transparent: true, opacity: 0.8 }));
     h.add(m); smoke.push(m);
   }
   addSpot('home', hp, homeG, '내 집', `블록 ${Math.round(HA.size * 361).toLocaleString('ko-KR')}㎡`, HA.size);
+
+  // little flower patches on the green islands
+  function flowers(group, A, n, taken) {
+    for (let i = 0; i < n; i++) {
+      const p = randomInside(A, 0.5, taken, 0.3); if (!p) break;
+      const c = ['#FF8FB8', '#FFD84A', '#FFFFFF', '#B99BFF', '#FF7A6B'][i % 5];
+      group.add(mesh(cyl(0.025, 0.025, 0.3, 5), '#3FB66A', { p: [p.x, ISLAND_H + 0.15, p.z] }));
+      group.add(mesh(sph(0.13, 8), c, { p: [p.x, ISLAND_H + 0.33, p.z], s: [1, 0.6, 1] }));
+      group.add(mesh(sph(0.05, 6), '#FFE27A', { p: [p.x, ISLAND_H + 0.38, p.z] }));
+    }
+  }
+  flowers(farm, FA, clamp(Math.round(FA.size / 25), 6, 18), farmTaken);
+  flowers(forest, SA, clamp(Math.round(SA.size / 20), 8, 24), forestTaken);
+
+  const clouds = [];
+  const cloudMat = new THREE.MeshToonMaterial({ color: '#FFFFFF', gradientMap, transparent: true, opacity: 0.92 });
+  for (let i = 0; i < 7; i++) {
+    const c = new THREE.Group();
+    [[0, 0, 0, 2.2], [2, -0.3, 0.4, 1.6], [-2, -0.4, -0.2, 1.5], [0.8, 0.9, 0, 1.4]]
+      .forEach(([x, y, z, r]) => { const m = new THREE.Mesh(sph(r, 14), cloudMat); m.position.set(x, y, z); m.scale.y = 0.75; c.add(m); });
+    c.position.set(-80 + i * 25 + rnd() * 10, 22 + rnd() * 8, -40 + rnd() * 70);
+    c.scale.setScalar(0.8 + rnd() * 0.6);
+    c.userData.speed = 0.6 + rnd() * 0.6;
+    scene.add(c); clouds.push(c);
+  }
 
   // ---------- floating tags ----------
   const tagLayer = document.getElementById('tags');
@@ -597,8 +654,8 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
     }
     else if (current === 'home') {
       state.lights = !state.lights;
-      h.userData.glow.color.set(state.lights ? '#FFD98A' : '#5A6270');
-      h.userData.lamp.intensity = state.lights ? 0.9 : 0;
+      h.userData.glow.color.set(state.lights ? '#FFD98A' : '#8FA4B8');
+      h.userData.lamp.intensity = state.lights ? 0.4 : 0;
     }
     if (bridge) bridge.saveState(JSON.stringify(state));
     showCard(current, note);
@@ -651,7 +708,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
   window.addEventListener('resize', resize);
   resize();
 
-  animals.forEach((a) => { a.goal = a.obj.position.clone(); a.wait = Math.random() * 2; });
+  animals.forEach((a) => { a.goal = a.obj.position.clone(); a.wait = Math.random() * 2; a.obj.userData.baseY = a.obj.userData.body.position.y; });
   const clock = new THREE.Clock();
   const tmp = new THREE.Vector3();
   function tick() {
@@ -671,6 +728,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
           a.wait -= dt;
           u.head.rotation.z = -0.45 * Math.max(0, Math.sin(t * 2 + i));
           u.legs.forEach((l) => { l.rotation.z *= 0.8; });
+          u.body.position.y = u.baseY;
           if (a.wait <= 0) {
             const p = randomInside(a.area, 0.9);
             // only accept goals whose straight path stays inside the block
@@ -690,6 +748,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
         u.head.rotation.z *= 0.9;
         const step = Math.sin(t * 12 + i);
         u.legs.forEach((l, j) => { l.rotation.z = (j % 2 ? 1 : -1) * step * 0.35; });
+        u.body.position.y = u.baseY + Math.abs(step) * 0.08; // little hop while walking
       });
       swayers.forEach((tr, i) => { tr.userData.sway.rotation.z = Math.sin(t * 1.1 + i) * 0.035; tr.userData.sway.rotation.x = Math.cos(t * 0.9 + i) * 0.025; });
       const dk = pier.userData;
@@ -698,6 +757,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
       dk.ripple.scale.setScalar(0.6 + rp * 1.6);
       dk.ripple.material.opacity = 0.6 * (1 - rp);
       dk.boat.position.y = 0.25 + Math.sin(t * 1.4) * 0.05;
+      clouds.forEach((c) => { c.position.x += c.userData.speed * dt; if (c.position.x > 95) c.position.x = -95; });
       dk.boat.rotation.z = Math.sin(t * 1.1) * 0.04;
       smoke.forEach((m, i) => {
         const p = (t * 0.25 + i / smoke.length) % 1;
@@ -720,7 +780,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
     requestAnimationFrame(tick);
   }
   $('coins').textContent = coins.toLocaleString('ko-KR');
-  if (!state.lights) { h.userData.glow.color.set('#5A6270'); h.userData.lamp.intensity = 0; }
+  if (!state.lights) { h.userData.glow.color.set('#8FA4B8'); h.userData.lamp.intensity = 0; }
   if (!state.wool) spots.farm.tagSubEl.textContent = '수확 완료';
   showCard('farm');
   go('all');
