@@ -1,5 +1,6 @@
 package com.cartopia.app
 
+import com.cartopia.app.car.DemoRouteFeed
 import com.cartopia.app.drive.Miles
 import com.cartopia.app.drive.SafetyScorer
 import com.cartopia.app.geo.GeoPoint
@@ -64,5 +65,16 @@ class MapLogicTest {
         s.onLocation(GeoPoint(lat - 0.00009 + 0.000018, 127.04, t))
         assertEquals(SafetyScorer.Kind.HARD_BRAKE, s.events.single().kind)
         assertEquals(95, s.score)
+    }
+
+    @Test
+    fun demoDriveShowsExactlyOneHardBrakeAndOneMissedSignal() {
+        val steps = DemoRouteFeed.plan(routes.demo, startMillis = 0)
+        val scorer = DemoRouteFeed.score(steps)
+        val kinds = scorer.events.groupingBy { it.kind }.eachCount()
+        assertEquals(mapOf(SafetyScorer.Kind.HARD_BRAKE to 1, SafetyScorer.Kind.TURN_WITHOUT_SIGNAL to 1), kinds)
+        // One fix a second, like a real GPS, and a believable 7-12 minute drive.
+        assertTrue(steps.zipWithNext().all { (a, b) -> b.fix.timeMillis - a.fix.timeMillis in 1..1000 })
+        assertTrue("${steps.size} s", steps.size in 420..720)
     }
 }

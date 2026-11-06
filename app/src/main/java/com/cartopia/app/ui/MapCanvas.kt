@@ -24,6 +24,7 @@ import kotlin.math.max
 /**
  * Black world, the gray map only inside opened blocks, every driven road as a white line.
  * [focus] is kept at the centre (the car while driving); [zoom] is relative to "fill the view".
+ * With [followCar] the view may run past the map edge (it is all unexplored black there) so the car never sticks to the border.
  */
 @Composable
 fun MapCanvas(
@@ -35,7 +36,8 @@ fun MapCanvas(
     car: MapPoint?,
     focus: MapPoint?,
     zoom: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    followCar: Boolean = false
 ) {
     val w = blockMap.viewport.width.toFloat()
     val h = blockMap.viewport.height.toFloat()
@@ -48,8 +50,12 @@ fun MapCanvas(
         val s = max(size.width / w, size.height / h) * zoom
         val cx = focus?.x ?: (w / 2)
         val cy = focus?.y ?: (h / 2)
-        val tx = (size.width / 2 - cx * s).coerceIn(size.width - w * s, 0f)
-        val ty = (size.height / 2 - cy * s).coerceIn(size.height - h * s, 0f)
+        var tx = size.width / 2 - cx * s
+        var ty = size.height / 2 - cy * s
+        if (!followCar) {
+            tx = tx.coerceIn(size.width - w * s, 0f)
+            ty = ty.coerceIn(size.height - h * s, 0f)
+        }
         withTransform({
             translate(tx, ty)
             scale(s, s, Offset.Zero)

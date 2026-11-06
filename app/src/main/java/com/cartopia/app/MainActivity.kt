@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
             when (state.screen) {
                 Screen.DRIVE -> DriveScreen(state, vm.blockMap, map, onDemo = vm::startDemoDrive, onVillage = vm::openVillage)
                 Screen.RESULT -> ResultScreen(state, vm.blockMap, map, onVillage = vm::openVillage, onMap = vm::openMap)
-                Screen.VILLAGE -> VillageScreen(vm, onMap = vm::openMap)
+                Screen.VILLAGE -> VillageScreen(vm)
             }
         }
     }

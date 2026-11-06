@@ -42,7 +42,7 @@ fun DriveScreen(state: UiState, blockMap: BlockMap, baseMap: ImageBitmap, onDemo
         Box(Modifier.weight(1f).fillMaxHeight()) {
             MapCanvas(
                 blockMap, baseMap, state.revealed, state.history, state.current, state.car,
-                focus = state.car, zoom = if (state.driving) 1.6f else 1f, modifier = Modifier.fillMaxSize()
+                focus = state.car, zoom = if (state.driving) 1.6f else 1f, modifier = Modifier.fillMaxSize(), followCar = state.driving
             )
             Pill("내 지도 ${state.exploredPercent}%", Modifier.padding(24.dp))
             Text(
@@ -142,7 +142,7 @@ fun ResultScreen(state: UiState, blockMap: BlockMap, baseMap: ImageBitmap, onVil
 /** The 3D village (three.js) bundled in assets/village, talking to the app through [VillageBridge]. */
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun VillageScreen(vm: AppViewModel, onMap: () -> Unit) {
+fun VillageScreen(vm: AppViewModel) {
     Box(Modifier.fillMaxSize().background(RcColors.Fog)) {
         AndroidView(
             modifier = Modifier.fillMaxSize(),
@@ -151,7 +151,7 @@ fun VillageScreen(vm: AppViewModel, onMap: () -> Unit) {
                     .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(ctx))
                     .build()
                 WebView(ctx).apply {
-                    setBackgroundColor(android.graphics.Color.parseColor("#111111"))
+                    setBackgroundColor(android.graphics.Color.parseColor("#BEE5F2"))
                     settings.javaScriptEnabled = true
                     settings.domStorageEnabled = true
                     webViewClient = object : WebViewClient() {
@@ -164,7 +164,6 @@ fun VillageScreen(vm: AppViewModel, onMap: () -> Unit) {
             },
             onRelease = { it.destroy() }
         )
-        PillButton("지도로", onMap, Modifier.align(Alignment.BottomStart).padding(start = 24.dp, bottom = 96.dp).width(140.dp), filled = false)
     }
 }
 
@@ -174,6 +173,9 @@ class VillageBridge(private val vm: AppViewModel) {
     @JavascriptInterface fun spend(n: Int): Boolean = vm.spendMiles(n)
     @JavascriptInterface fun getState(): String = vm.villageState()
     @JavascriptInterface fun saveState(json: String) = vm.saveVillageState(json)
+    @JavascriptInterface fun getOpenBlocks(): Int = vm.state.value.revealed.size
+    // The back button lives in the page so it matches the village's look.
+    @JavascriptInterface fun openMap() = vm.openMap()
 }
 
 @Composable

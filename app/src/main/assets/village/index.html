@@ -3,8 +3,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>카토피아 3D 마을</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
 <style>
+/* Bundled so the village keeps its look offline in the car (SIL OFL, see jua-OFL.txt). */
+@font-face { font-family: 'Jua'; src: url('jua.woff2') format('woff2'); font-display: block; }
 /* Layout: full-bleed sunny 3D diorama with floating cream bubbles */
 :root {
   color-scheme: light;
@@ -22,7 +23,7 @@
 }
 html, body { height: 100%; }
 [hidden] { display: none !important; }
-body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans); overflow: hidden; }
+body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans); overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 #stage { position: fixed; inset: 0; }
 #stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 .pill { background: var(--sheet); border-radius: 999px; padding: 10px 20px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 0 var(--line), 0 10px 24px rgb(91 70 54 / 0.12); }
@@ -36,6 +37,7 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
 .bottom { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; pointer-events: none; }
 .chips { display: flex; gap: 8px; overflow-x: auto; max-width: 100%; pointer-events: auto; padding-bottom: 2px; }
 .chip { flex: none; border: 0; background: var(--sheet); color: var(--ink); font: 400 17px var(--round); padding: 11px 20px; border-radius: 999px; cursor: pointer; box-shadow: 0 4px 0 var(--line); }
+.chip.back { background: var(--ink); color: var(--sheet); box-shadow: 0 4px 0 #3E2F24; margin-right: 6px; }
 .chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); box-shadow: 0 4px 0 #36A062; }
 .chip:focus-visible, .act:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .card { pointer-events: auto; width: min(360px, 100%); box-sizing: border-box; background: var(--sheet); border-radius: 32px; padding: 22px 24px; display: grid; gap: 10px; box-shadow: 0 6px 0 var(--line), 0 16px 32px rgb(91 70 54 / 0.14); }
@@ -59,13 +61,14 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
 
 <div id="stage" aria-label="응봉·성수 일대 실제 지도 위의 3D 마을. 끌어서 돌리고, 휠이나 두 손가락으로 확대합니다."></div>
 <div class="top">
-  <div class="pill"><span class="title">응봉·성수 마을</span><span class="sub">열린 블록 62 · 주민 7</span></div>
+  <div class="pill"><span class="title">응봉·성수 마을</span><span class="sub" id="stats"></span></div>
   <div class="pill coins" aria-live="polite"><span id="coins">1,280</span><small>마일</small></div>
 </div>
 <div class="credit">지도 © OpenStreetMap contributors</div>
 <div id="tags"></div>
 <div class="bottom">
   <div class="chips" role="group" aria-label="장소로 이동">
+    <button class="chip back" type="button" id="back" hidden>지도로</button>
     <button class="chip" type="button" data-go="all" aria-pressed="true">전체</button>
     <button class="chip" type="button" data-go="farm" aria-pressed="false">응봉산 목장</button>
     <button class="chip" type="button" data-go="forest" aria-pressed="false">서울숲</button>
@@ -619,8 +622,13 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
 
   // ---------- info card + actions ----------
   const bridge = window.Cartopia;
+  const $ = (id) => document.getElementById(id);
   let coins = bridge ? Number(bridge.getMiles()) : 1280;
   const fish = ['피라미', '붕어', '잉어', '쏘가리', '메기', '끄리'];
+  // Open blocks come from the app (they grow with every drive); residents are the animals placed above.
+  const openBlocks = bridge ? Number(bridge.getOpenBlocks()) : data.blocks.length;
+  $('stats').textContent = `열린 블록 ${openBlocks} · 주민 ${sheepCount + 3}`;
+  if (bridge) { $('back').hidden = false; $('back').addEventListener('click', () => bridge.openMap()); }
   const state = Object.assign({ wool: 3, fed: false, dex: 5, lights: true }, bridge ? JSON.parse(bridge.getState() || '{}') : {});
   const info = {
     farm: () => ({ t: '응봉산 양 목장', m: `Lv.2 · 양 ${sheepCount}마리 · 목장 ${Math.round(FA.size * 361).toLocaleString('ko-KR')}㎡`, b: state.wool ? `응봉산 공원 블록을 지나며 열린 목장이에요. 양털이 ${state.wool}개 쌓였어요.` : '양털을 모두 거뒀어요. 8km를 더 달리면 다시 자라요.', a: state.wool ? `양털 수확하기 · +${state.wool * 4} 마일` : '수확 완료', on: !!state.wool }),
@@ -628,7 +636,6 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
     dock: () => ({ t: '중랑천 낚시터', m: `물고기 도감 ${state.dex}/30`, b: '응봉교를 건너며 열린 물가예요. 찌가 흔들리고 있어요.', a: '낚싯대 올리기', on: true }),
     home: () => ({ t: '내 집', m: 'Lv.2 · 마당 2/6칸', b: '성수동1가에 있는 내 집이에요. 마당 꾸미기는 차를 세운 뒤 열려요.', a: state.lights ? '창문 불 끄기' : '창문 불 켜기', on: true }),
   };
-  const $ = (id) => document.getElementById(id);
   let current = 'farm';
   function showCard(id, note = '') {
     current = id;
