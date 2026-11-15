@@ -38,6 +38,13 @@ class SafetyScorer {
     private val bearings = ArrayDeque<Pair<Long, Double>>()
     private val lastEventAt = HashMap<Kind, Long>()
 
+    /** Takes back the events of a drive that was cut off (see AppCore's trip snapshot). */
+    fun restore(events: List<Event>) {
+        _events += events
+        events.forEach { lastEventAt[it.kind] = it.atMillis }
+        seatBeltWarned = events.any { it.kind == Kind.SEAT_BELT }
+    }
+
     fun onBrakePedal(pressed: Boolean, now: Long) {
         if (pressed) brakePressedAt = now
     }

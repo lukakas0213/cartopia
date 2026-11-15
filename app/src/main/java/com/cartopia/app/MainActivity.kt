@@ -1,54 +1,53 @@
 package com.cartopia.app
 
-import android.graphics.BitmapFactory
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
+import androidx.lifecycle.lifecycleScope
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cartopia.app.ui.DriveScreen
-import com.cartopia.app.ui.RcColors
-import com.cartopia.app.ui.RcType
-import com.cartopia.app.ui.ResultScreen
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import com.cartopia.app.geo.GeoPoint
+import com.cartopia.app.ui.LoadingScreen
 import com.cartopia.app.ui.VillageScreen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
 
-    private val vm: AppViewModel by viewModels()
+    private val vm: AppCore get() = (application as CartopiaApp).core
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val state by vm.state.collectAsStateWithLifecycle()
-            val baseMap by produceState<ImageBitmap?>(null) {
-                value = withContext(Dispatchers.IO) {
-                    assets.open("map/base_map.png").use { BitmapFactory.decodeStream(it).asImageBitmap() }
-                }
-            }
-            val map = baseMap
-            if (!state.loaded || map == null) {
-                Box(Modifier.fillMaxSize().background(RcColors.Fog), contentAlignment = Alignment.Center) {
-                    Text("지도를 준비하고 있어요", style = RcType.Label)
-                }
-                return@setContent
-            }
-            when (state.screen) {
-                Screen.DRIVE -> DriveScreen(state, vm.blockMap, map, onDemo = vm::startDemoDrive, onVillage = vm::openVillage)
-                Screen.RESULT -> ResultScreen(state, vm.blockMap, map, onVillage = vm::openVillage, onMap = vm::openMap)
-                Screen.VILLAGE -> VillageScreen(vm)
-            }
+            if (state.loaded) VillageScreen(vm) else LoadingScreen()
+        }
+        qaDrive(intent)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        TripService.start(this) // allowed now, while on screen; it keeps drives recording once the app is off it
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        qaDrive(intent)
+    }
+
+    /** QA on an emulator: `--es qa_route "lat,lon;lat,lon;..." [--ef qa_speed 8]` drives that route. */
+    private fun qaDrive(intent: Intent?) {
+        val raw = intent?.getStringExtra("qa_route") ?: return
+        intent.removeExtra("qa_route")
+        val route = raw.split(';').mapNotNull { p ->
+            val (lat, lon) = p.split(',').takeIf { it.size == 2 } ?: return@mapNotNull null
+            GeoPoint(lat.trim().toDoubleOrNull() ?: return@mapNotNull null, lon.trim().toDoubleOrNull() ?: return@mapNotNull null)
+        }
+        val speed = intent.getFloatExtra("qa_speed", 4f).toDouble()
+        lifecycleScope.launch {
+            vm.state.first { it.loaded }
+            vm.startQaDrive(route, speed)
         }
     }
 }

@@ -5,7 +5,9 @@ import com.cartopia.app.drive.Miles
 import com.cartopia.app.drive.SafetyScorer
 import com.cartopia.app.geo.GeoPoint
 import com.cartopia.app.map.BlockMap
+import com.cartopia.app.geo.MapPoint
 import com.cartopia.app.map.BlockRevealer
+import com.cartopia.app.map.RoadSnapper
 import com.cartopia.app.map.RouteBook
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -14,7 +16,7 @@ import java.io.File
 
 class MapLogicTest {
 
-    private val map = BlockMap.parse(File("src/main/assets/map/blocks.json").readText())
+    private val map = BlockMap.load { File("src/main/assets/map/seoul/$it").readText() }
     private val routes = RouteBook.parse(File("src/main/assets/map/routes.json").readText())
 
     @Test
@@ -29,9 +31,33 @@ class MapLogicTest {
     fun allRoutesOpenAboutAsManyBlocksAsTheShapelyReference() {
         val revealer = BlockRevealer(map)
         (routes.history + listOf(routes.demo)).forEach { r -> revealer.addPolyline(r.map { map.viewport.toMap(it) }) }
-        // shapely (exterior ∩ route band > 36 px) opened 57 of 409 blocks for the same routes.
+        // Driven along + across medians + the 150 m circle (small blocks touched, big ones half inside) + hole fill
+        // opened 277 on the Seoul map when the circle rule came in.
         val n = revealer.revealed.size
-        assertTrue("opened $n blocks", n in 50..64)
+        assertTrue("opened $n blocks", n in 265..290)
+    }
+
+    @Test
+    fun aCarOneLaneOffTheCentreLineOpensTheSameBlocksOnceSnapped() {
+        val line = routes.demo.map { map.viewport.toMap(it) }
+        val mpu = map.viewport.metersPerUnit(map.viewport.centerLat).toFloat()
+        // 9 m to the right of the centre line: the outer lane of a wide road
+        val shifted = line.mapIndexed { i, p ->
+            val a = line[maxOf(0, i - 1)]
+            val b = line[minOf(line.size - 1, i + 1)]
+            val len = kotlin.math.hypot(b.x - a.x, b.y - a.y).takeIf { it > 0f } ?: 1f
+            MapPoint(p.x - (b.y - a.y) / len * 9f / mpu, p.y + (b.x - a.x) / len * 9f / mpu)
+        }
+        // blocks driven along (the bonus ones); the nearby rules hide part of the loss in the total
+        fun driven(points: List<MapPoint>): Int {
+            val r = BlockRevealer(map)
+            return points.zipWithNext().sumOf { (a, b) -> r.addSegment(a, b).let { it.direct.size + it.drivenOver.size } }
+        }
+        val onLine = driven(line)
+        val raw = driven(shifted)
+        val snapper = RoadSnapper(map)
+        val snapped = driven(shifted.map(snapper::snap))
+        assertTrue("on line $onLine, shifted $raw, snapped $snapped", raw < onLine * 0.9 && snapped >= onLine * 0.9)
     }
 
     @Test
@@ -39,16 +65,19 @@ class MapLogicTest {
         val revealer = BlockRevealer(map)
         val a = map.viewport.toMap(routes.demo[40])
         val b = map.viewport.toMap(routes.demo[41])
-        val opened = revealer.addSegment(a, b)
+        val opened = revealer.addSegment(a, b).direct
         assertTrue("short hop opened $opened", opened.size <= 2)
     }
 
     @Test
-    fun milesFollowDistanceSafetyAndNewBlocks() {
-        val m = Miles.forTrip(gpsKm = 23.4, odometerKm = 23.1, multiplier = 1.42, newBlocks = 4)
-        assertEquals(23, m.base)
-        assertEquals((23 * 1.42).toInt().let { if (23 * 1.42 - it >= 0.5) it + 1 else it } + 8, m.total)
-        val spoofed = Miles.forTrip(gpsKm = 30.0, odometerKm = 2.0, multiplier = 1.4, newBlocks = 10)
+    fun milesFollowDistanceSafetyAndNewGround() {
+        val m = Miles.forTrip(gpsKm = 23.4, odometerKm = 23.1, multiplier = 1.42, newM2 = 32_000.0)
+        // odometer distance wins: 23.1 km x 10 per km; 32,000 m² of new ground is 8
+        assertEquals(231, m.base)
+        assertEquals(Math.round(231 * 1.42).toInt() + 8, m.total)
+        // a park beside the road counts for at most 20,000 m²
+        assertEquals(20_000.0, Miles.bonusM2(250_000.0), 0.0)
+        val spoofed = Miles.forTrip(gpsKm = 30.0, odometerKm = 2.0, multiplier = 1.4, newM2 = 40_000.0)
         assertEquals(0, spoofed.total)
     }
 

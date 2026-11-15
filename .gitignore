@@ -1,3 +1,4 @@
+# Gradle / IDE
 .gradle/
 .kotlin/
 .idea/
@@ -5,5 +6,15 @@
 build/
 local.properties
 captures/
+
+# OS / Python
 .DS_Store
 __pycache__/
+
+# Release binaries are attached to GitHub Releases, not committed
+apk/
+*.apk
+*.mp4
+
+# Contest paperwork kept locally (proposal drafts, official forms)
+docs/contest/

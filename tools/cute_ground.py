@@ -1,6 +1,8 @@
 """Recolor the dark village ground map into the bright pastel palette used by the 3D village.
 
-usage: python cute_ground.py dark_ground.jpg out_ground.jpg
+usage: python cute_ground.py dark_ground.jpg out_ground.jpg [--no-route] [--width N]
+
+With --no-route the bright pixels stay road-coloured (for base_map.png, which has no driven route).
 """
 import sys
 
@@ -19,7 +21,7 @@ ROAD = np.array([255, 252, 244], float)
 ROUTE = np.array([255, 160, 90], float)
 
 
-def main(src, dst):
+def main(src, dst, route=True, width=None):
     src_im = Image.open(src).convert("RGB")
     im = np.asarray(src_im, float)
     lum = im.mean(axis=2)
@@ -38,10 +40,16 @@ def main(src, dst):
     # grey road lines, then the white driven route on top
     a_road = np.clip((lum - base_lum - 5) / 28, 0, 1)[..., None]
     out = out * (1 - a_road) + ROAD * a_road
-    a_route = np.clip((lum - 130) / (240 - 130), 0, 1)[..., None]
-    out = out * (1 - a_route) + ROUTE * a_route
-    Image.fromarray(out.clip(0, 255).astype(np.uint8)).save(dst, quality=90)
+    if route:
+        a_route = np.clip((lum - 130) / (240 - 130), 0, 1)[..., None]
+        out = out * (1 - a_route) + ROUTE * a_route
+    img = Image.fromarray(out.clip(0, 255).astype(np.uint8))
+    if width:
+        img = img.resize((width, round(img.height * width / img.width)), Image.LANCZOS)
+    img.save(dst, quality=90)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    args = sys.argv[1:]
+    width = int(args[args.index("--width") + 1]) if "--width" in args else None
+    main(args[0], args[1], route="--no-route" not in args, width=width)

@@ -17,7 +17,7 @@ data class MapPoint(val x: Float, val y: Float)
  * Map units are the CSS pixels of that view (the bundled image is drawn at 2x).
  */
 class Viewport(
-    centerLat: Double,
+    val centerLat: Double,
     centerLon: Double,
     val zoom: Int,
     val width: Int,

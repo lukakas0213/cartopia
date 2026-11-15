@@ -37,7 +37,8 @@ android {
         compose = true
     }
     androidResources {
-        noCompress += listOf("png", "jpg", "json", "js", "html")
+        // the Seoul map tiles (assets/map/seoul, ~22 MB of json) are left compressed; AssetManager reads them either way
+        noCompress += listOf("png", "jpg", "js", "html")
     }
     packaging {
         resources {

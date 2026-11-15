@@ -162,7 +162,7 @@ class DemoRouteFeed(
                     knotS += grid[i]
                 }
             }
-            val brakeFrom = knotT[(stopAt - 15 until stopAt).first { v[it] < CRUISE_MS } - 1]
+            val brakeFrom = knotT[((stopAt - 15).coerceAtLeast(1) until stopAt).firstOrNull { v[it] < CRUISE_MS }?.minus(1) ?: stopAt]
             val brakeTo = knotT[stopAt + 1]
 
             var k = 0
