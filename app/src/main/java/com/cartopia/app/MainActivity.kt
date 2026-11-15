@@ -9,10 +9,16 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import com.cartopia.app.core.AppCore
 import com.cartopia.app.geo.GeoPoint
+import com.cartopia.app.service.TripService
 import com.cartopia.app.ui.LoadingScreen
 import com.cartopia.app.ui.VillageScreen
 
+/**
+ * The only screen. It shows [LoadingScreen] until the map index is read, then the 3D village ([VillageScreen]),
+ * which serves both gears. All state lives in [AppCore], so closing this Activity never stops a drive.
+ */
 class MainActivity : ComponentActivity() {
 
     private val vm: AppCore get() = (application as CartopiaApp).core

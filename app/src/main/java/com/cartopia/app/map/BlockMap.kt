@@ -1,6 +1,5 @@
 package com.cartopia.app.map
 
-import com.cartopia.app.geo.GeoPoint
 import com.cartopia.app.geo.Viewport
 import org.json.JSONArray
 import org.json.JSONObject
@@ -114,25 +113,6 @@ class BlockMap(
                 out[i * 2 + 1] = p.getDouble(1).toFloat()
             }
             return out
-        }
-    }
-}
-
-/** Bundled demo data: earlier drives already on the map, and the route the demo drive replays. */
-class RouteBook(val history: List<List<GeoPoint>>, val demo: List<GeoPoint>) {
-    companion object {
-        fun parse(json: String): RouteBook {
-            val root = JSONObject(json)
-            val history = root.getJSONArray("history")
-            return RouteBook(
-                history = (0 until history.length()).map { points(history.getJSONArray(it)) },
-                demo = points(root.getJSONArray("demo"))
-            )
-        }
-
-        private fun points(arr: JSONArray) = (0 until arr.length()).map {
-            val p = arr.getJSONArray(it)
-            GeoPoint(p.getDouble(0), p.getDouble(1))
         }
     }
 }

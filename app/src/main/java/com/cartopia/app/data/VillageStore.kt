@@ -44,7 +44,7 @@ class VillageStore(context: Context) {
             prefs.edit().putString(KEY_ROUTES, arr.toString()).apply()
         }
 
-    /** Village state owned by the 3D page (placed items, names, stock, storage) as an opaque JSON string. */
+    /** Village state owned by the 3D page (placed items, stored items, terrain found, today's blocks) as an opaque JSON string. */
     var villageState: String
         get() = prefs.getString(KEY_VILLAGE, "{}")!!
         set(value) = prefs.edit().putString(KEY_VILLAGE, value).apply()

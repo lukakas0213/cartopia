@@ -1,4 +1,4 @@
-package com.cartopia.app
+package com.cartopia.app.service
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,6 +12,9 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.cartopia.app.CartopiaApp
+import com.cartopia.app.MainActivity
+import com.cartopia.app.R
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +26,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
- * Keeps the process in the foreground while the app is off screen, so [AppCore] goes on watching the gear and
+ * Keeps the process in the foreground while the app is off screen, so [com.cartopia.app.core.AppCore] goes on watching the gear and
  * recording the drive when the driver switches to the navigation app. It does no work of its own.
  *
  * It is started while the app is on screen (Android does not let a background app start one), and then stays for

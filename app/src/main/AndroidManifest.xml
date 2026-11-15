@@ -42,7 +42,7 @@
         </activity>
 
         <receiver
-            android:name=".StartAtBoot"
+            android:name=".service.StartAtBoot"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -51,7 +51,7 @@
         </receiver>
 
         <service
-            android:name=".TripService"
+            android:name=".service.TripService"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property

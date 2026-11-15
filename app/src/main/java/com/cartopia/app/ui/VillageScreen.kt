@@ -2,7 +2,6 @@ package com.cartopia.app.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
@@ -11,7 +10,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -19,29 +17,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.webkit.WebViewAssetLoader
-import com.cartopia.app.AppCore
-
-/** Theme A colours, matching the village page while it loads. */
-private val Sea = Color(0xFFBEE5F2)
-private val Ink2 = Color(0xFF7E6855)
-
-@Composable
-fun LoadingScreen() {
-    Box(Modifier.fillMaxSize().background(Sea), contentAlignment = Alignment.Center) {
-        Text("지도 불러오는 중…", style = TextStyle(color = Ink2, fontSize = 20.sp))
-    }
-}
+import com.cartopia.app.core.AppCore
 
 /**
  * The whole app UI: the 3D village (three.js) bundled in assets/village. It drives on the same map it decorates,
@@ -80,7 +64,7 @@ fun VillageScreen(vm: AppCore) {
                 .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(ctx))
                 .build()
             WebView(ctx).apply {
-                setBackgroundColor(android.graphics.Color.parseColor("#BEE5F2"))
+                setBackgroundColor(Sea.toArgb())
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
                 webViewClient = object : WebViewClient() {
@@ -94,14 +78,4 @@ fun VillageScreen(vm: AppCore) {
         },
         onRelease = { it.destroy() }
     )
-}
-
-class VillageBridge(private val vm: AppCore) {
-    @JavascriptInterface fun getInit(): String = vm.pageInit()
-    @JavascriptInterface fun getMiles(): Int = vm.milesForVillage()
-    @JavascriptInterface fun earn(n: Int) = vm.earnMiles(n)
-    @JavascriptInterface fun spend(n: Int): Boolean = vm.spendMiles(n)
-    @JavascriptInterface fun saveState(json: String) = vm.saveVillageState(json)
-    @JavascriptInterface fun takeTrips(): String = vm.takePendingTrips()
-    @JavascriptInterface fun startDemo() = vm.startDemoDrive()
 }

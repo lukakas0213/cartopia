@@ -1,4 +1,4 @@
-package com.cartopia.app
+package com.cartopia.app.service
 
 import android.content.BroadcastReceiver
 import android.content.Context

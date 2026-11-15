@@ -1,4 +1,4 @@
-package com.cartopia.app
+package com.cartopia.app.core
 
 import android.app.Application
 import com.cartopia.app.car.Announcer
@@ -37,36 +37,7 @@ import org.json.JSONObject
 import kotlin.math.roundToInt
 
 /**
- * What the 3D page shows. The gear decides it: D drives, P saves the trip and opens decorating.
- * There is no other screen; the same map is used for both.
- */
-enum class Mode(val key: String) { EDIT("edit"), DRIVE("drive"), SAVING("saving") }
-
-data class TripLive(
-    val distanceKm: Double,
-    val elapsedSec: Long,
-    val score: Int,
-    /** Ground this drive opened, driven along or nearby. */
-    val areaM2: Double,
-    val estimatedMiles: Int
-)
-
-data class UiState(
-    val loaded: Boolean = false,
-    val mode: Mode = Mode.EDIT,
-    val demo: Boolean = false,
-    val vehicleConnected: Boolean = false,
-    val gear: Gear = Gear.UNKNOWN,
-    val miles: Int = 0,
-    val revealed: Set<Int> = emptySet(),
-    val car: MapPoint? = null,
-    val trip: TripLive? = null
-) {
-    val driving: Boolean get() = mode == Mode.DRIVE
-}
-
-/**
- * The app's state and the trip recorder, one per process ([CartopiaApp] owns it).
+ * The app's state and the trip recorder, one per process ([com.cartopia.app.CartopiaApp] owns it).
  * It does not live in the Activity: on Pleos the app shares the screen with the navigation app and is often pushed
  * off it, and a drive must keep recording while the driver looks at the navigation map.
  */

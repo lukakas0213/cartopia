@@ -18,6 +18,8 @@ class MapLogicTest {
 
     private val map = BlockMap.load { File("src/main/assets/map/seoul/$it").readText() }
     private val routes = RouteBook.parse(File("src/main/assets/map/routes.json").readText())
+    /** The first demo route (왕십리역 → 응봉역 → 성수동1가), kept as a fixture so these numbers do not move with the demo. */
+    private val sungsu = routes.history.last()
 
     @Test
     fun homeProjectsToTheSamePixelAsTheRenderer() {
@@ -30,7 +32,7 @@ class MapLogicTest {
     @Test
     fun allRoutesOpenAboutAsManyBlocksAsTheShapelyReference() {
         val revealer = BlockRevealer(map)
-        (routes.history + listOf(routes.demo)).forEach { r -> revealer.addPolyline(r.map { map.viewport.toMap(it) }) }
+        routes.history.forEach { r -> revealer.addPolyline(r.map { map.viewport.toMap(it) }) }
         // Driven along + across medians + the 150 m circle (small blocks touched, big ones half inside) + hole fill
         // opened 277 on the Seoul map when the circle rule came in.
         val n = revealer.revealed.size
@@ -39,7 +41,7 @@ class MapLogicTest {
 
     @Test
     fun aCarOneLaneOffTheCentreLineOpensTheSameBlocksOnceSnapped() {
-        val line = routes.demo.map { map.viewport.toMap(it) }
+        val line = sungsu.map { map.viewport.toMap(it) }
         val mpu = map.viewport.metersPerUnit(map.viewport.centerLat).toFloat()
         // 9 m to the right of the centre line: the outer lane of a wide road
         val shifted = line.mapIndexed { i, p ->
@@ -63,8 +65,8 @@ class MapLogicTest {
     @Test
     fun crossingAnIntersectionDoesNotOpenTheCornerBlocks() {
         val revealer = BlockRevealer(map)
-        val a = map.viewport.toMap(routes.demo[40])
-        val b = map.viewport.toMap(routes.demo[41])
+        val a = map.viewport.toMap(sungsu[40])
+        val b = map.viewport.toMap(sungsu[41])
         val opened = revealer.addSegment(a, b).direct
         assertTrue("short hop opened $opened", opened.size <= 2)
     }
