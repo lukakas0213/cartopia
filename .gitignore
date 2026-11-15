@@ -11,9 +11,9 @@ captures/
 .DS_Store
 __pycache__/
 
-# Release binaries are attached to GitHub Releases, not committed
-apk/
+# Only the contest submission APK in apk/ is committed; videos live in Releases
 *.apk
+!apk/*_release.apk
 *.mp4
 
 # Contest paperwork kept locally (proposal drafts, official forms)

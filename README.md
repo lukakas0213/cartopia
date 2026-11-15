@@ -8,7 +8,8 @@
 |---|---|---|
 | ![주행 중: 스케일타워에서 출발](docs/images/01_drive_start.jpg) | ![주행 요약과 오늘 지나간 지도](docs/images/03_summary.jpg) | ![카페를 배치한 구역](docs/images/05_item_card.jpg) |
 
-- **시연 영상(1분 55초)과 APK:** [Releases](https://github.com/lukakas0213/cartopia/releases/latest)에서 받을 수 있습니다.
+- **APK:** [`apk/Cartopia_release.apk`](apk/Cartopia_release.apk)
+- **시연 영상(1분 55초):** [Releases](https://github.com/lukakas0213/cartopia/releases/latest)
 - **게임 규칙:** [docs/game-rules.md](docs/game-rules.md)
 - **구조:** [docs/architecture.md](docs/architecture.md)
 
@@ -53,7 +54,7 @@
 ## 실행 방법
 
 1. Pleos Connect 에뮬레이터를 실행합니다([설치 가이드](https://document.pleos.ai/docs/connect/guide/getting-started/application-development/setup-connect-sdk-emulator)).
-2. [Releases](https://github.com/lukakas0213/cartopia/releases/latest)에서 `Cartopia_release.apk`를 받아 설치합니다.
+2. 저장소의 `apk/Cartopia_release.apk`를 설치합니다.
    ```
    adb install -r Cartopia_release.apk
    ```
@@ -89,6 +90,7 @@ app/src/main/
     ├── village/    3D 지도 페이지: index.html, village.css, village.js, three.js
     └── map/        서울 구역 타일(seoul/), 시연 경로(routes.json)
 app/src/test/       단위 테스트
+apk/                공모전 제출용 release APK
 docs/               게임 규칙, 구조, 문구 기준, 스크린샷
 tools/              OSM 데이터로 서울 지도를 만드는 Python 스크립트
 ```
