@@ -8,7 +8,7 @@
 |---|---|---|
 | ![주행 중: 스케일타워에서 출발](docs/images/01_drive_start.jpg) | ![주행 요약과 오늘 지나간 지도](docs/images/03_summary.jpg) | ![카페를 배치한 구역](docs/images/05_item_card.jpg) |
 
-- **APK:** [`apk/Cartopia_release.apk`](apk/Cartopia_release.apk)
+- **APK:** [`apk/동네한바퀴_카토피아_release.apk`](apk/동네한바퀴_카토피아_release.apk)
 - **시연 영상(1분 55초):** [Releases](https://github.com/lukakas0213/cartopia/releases/latest)
 - **게임 규칙:** [docs/game-rules.md](docs/game-rules.md)
 - **구조:** [docs/architecture.md](docs/architecture.md)
@@ -54,9 +54,9 @@
 ## 실행 방법
 
 1. Pleos Connect 에뮬레이터를 실행합니다([설치 가이드](https://document.pleos.ai/docs/connect/guide/getting-started/application-development/setup-connect-sdk-emulator)).
-2. 저장소의 `apk/Cartopia_release.apk`를 설치합니다.
+2. 저장소의 `apk/동네한바퀴_카토피아_release.apk`를 설치합니다.
    ```
-   adb install -r Cartopia_release.apk
+   adb install -r 동네한바퀴_카토피아_release.apk
    ```
 3. 앱을 실행하면 빈 지도가 열립니다. 왼쪽 아래의 **주행 체험하기**를 누르면 현대자동차 강남대로 사옥(스케일타워) → 테헤란로 → 선릉로 → 청담 한강 경로(6.9 km)를 재생하며 구역이 열립니다.
 4. 주행이 끝나면 자동으로 저장되고 주행 요약이 나옵니다. **지도 꾸미기**를 누른 뒤 열린 구역을 눌러 아이템을 배치합니다.
